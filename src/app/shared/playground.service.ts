@@ -20,7 +20,7 @@ export class PlaygroundService {
   getPlaygrounds(): Observable<Playground[]>{
     return this.playgrounds$;
   }
-
+  // returns an observable, that finds the playground on given id when subscribed
   findPlayground(id: string): Observable<Playground | undefined>{
     return this.playgrounds$.pipe(
       map(res => res.find(p => p.id === id))
