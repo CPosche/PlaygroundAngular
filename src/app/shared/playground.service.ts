@@ -11,6 +11,7 @@ export class PlaygroundService {
   private playgrounds$ = new Observable<Playground[]>;
 
   constructor(private http: HttpClient) {
+    // makes a blueprint for an observable we can subscribe to later, with the service injected
     this.playgrounds$ = this.http.get<Playground[]>('../assets/copenhagen.json').pipe(
       shareReplay(1)
     )
