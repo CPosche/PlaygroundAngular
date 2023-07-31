@@ -23,7 +23,7 @@ import { PlaygroundService } from '../shared/playground.service';
   </nav>
 </aside>`
 })
-export class SidebarComponent{
+export class SidebarComponent implements OnInit{
 
   @Input() playgrounds?: Playground[];
   @Input() selectedPlayground?: Playground

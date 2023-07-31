@@ -9,8 +9,11 @@ import { Observable, Subject, combineLatest, filter, map, shareReplay, switchMap
 
 @Component({
   selector: 'app-map',
-  templateUrl: './map.component.html',
-  styleUrls: ['./map.component.scss']
+  template: `<main class="vh-100 d-flex justify-content-center align-items-center">
+  <leaflet [center]="center" [markers]="markers"></leaflet>
+  <app-sidebar [playgrounds]="appPlaygrounds" [selectedPlayground]="playground" (filter)="filter$.next($event)" (selected)="playgroundSelected($event)"></app-sidebar>
+  <app-footer [playground]="playground"></app-footer>
+</main>`,
 })
 export class MapComponent implements OnInit{
 
@@ -26,6 +29,7 @@ export class MapComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    // waits for all three parameters(playgrounds, location and queryparams) to be forfilled(observables)
     combineLatest([
       this.playgroundService.getPlaygrounds(),
       this.locationService.current,
@@ -40,7 +44,9 @@ export class MapComponent implements OnInit{
       })
     ).subscribe(res => this.appPlaygrounds = res)
     this.locationService.current.subscribe(res => this.markers = [res])
+    // storing an observable of observables for finding playgrounds in a variable
     const playground$ = this.activatedRoute.params.pipe(
+      // manages all our observables depending on the switch in the id param from the url(subscribing/unsubscribing)
       switchMap(params => this.playgroundService.findPlayground(params['id'])),
       shareReplay(1)
     )
@@ -49,6 +55,7 @@ export class MapComponent implements OnInit{
     ).subscribe(res => {this.playground = res;
       this.center = {...this.playground!.position, zoom: 14};
     })
+    // waits for 2 parameters(location and playground observable) to be forfilled for markers
     combineLatest([
       this.locationService.current, 
       playground$.pipe(

@@ -1,15 +1,12 @@
-import { Component, Input } from '@angular/core';
-import { Playground } from '../shared/playground';
+import { Component, Input } from "@angular/core";
+import { Playground } from "../shared/playground";
 
 @Component({
-  selector: 'app-footer',
-  templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.scss']
+  selector: "app-footer",
+  template: `<footer *ngIf="playground">
+  <h3>{{playground.name}}</h3><p>{{playground.addressDescription}}</p><p>{{playground.description}}</p>
+</footer>`,
 })
 export class FooterComponent {
-
-  @Input() playground?: Playground
-
-
-
+  @Input() playground?: Playground;
 }
