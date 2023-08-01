@@ -11,13 +11,13 @@ import { Observable, Subject, combineLatest, filter, map, shareReplay, switchMap
   selector: 'app-map',
   template: `<main class="vh-100 d-flex justify-content-center align-items-center">
   <leaflet [center]="center" [markers]="markers"></leaflet>
-  <app-sidebar [playgrounds]="appPlaygrounds" [selectedPlayground]="playground" (filter)="filter$.next($event)" (selected)="playgroundSelected($event)"></app-sidebar>
+  <app-sidebar [playgrounds]="appPlaygrounds$ | async" [selectedPlayground]="playground" (filter)="filter$.next($event)" (selected)="playgroundSelected($event)"></app-sidebar>
   <app-footer [playground]="playground"></app-footer>
 </main>`,
 })
 export class MapComponent implements OnInit{
 
-  appPlaygrounds?: Playground[];
+  appPlaygrounds$: Observable<Playground[]>;
   playground?: Playground;
   center?: Center;
   markers?: Marker[];
@@ -26,11 +26,7 @@ export class MapComponent implements OnInit{
 
   constructor(private playgroundService: PlaygroundService, private locationService: LocationService, private routerService: Router, private activatedRoute: ActivatedRoute){
     this.center = {lat: 56.360029, lng: 10.746635}
-  }
-
-  ngOnInit(): void {
-    // waits for all three parameters(playgrounds, location and queryparams) to be forfilled(observables)
-    combineLatest([
+    this.appPlaygrounds$ = combineLatest([
       this.playgroundService.getPlaygrounds(),
       this.locationService.current,
       this.activatedRoute.queryParams.pipe(
@@ -42,7 +38,12 @@ export class MapComponent implements OnInit{
         const d = this.locationService.getDistance;
         return playgrounds.filter(playground => filter.test(playground.name)).sort((a, b) => d(a.position, location) - d(b.position, location))
       })
-    ).subscribe(res => this.appPlaygrounds = res)
+    )
+
+  }
+
+  ngOnInit(): void {
+    // waits for all three parameters(playgrounds, location and queryparams) to be forfilled(observables)
     this.locationService.current.subscribe(res => this.markers = [res])
     // storing an observable of observables for finding playgrounds in a variable
     const playground$ = this.activatedRoute.params.pipe(

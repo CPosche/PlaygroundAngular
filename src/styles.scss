@@ -12,3 +12,6 @@ $font-weight-normal: 500;
 
 @import "styles/aside";
 @import "styles/footer";
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';

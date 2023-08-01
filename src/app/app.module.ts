@@ -10,12 +10,14 @@ import { FooterComponent } from './footer/footer.component';
 import {HttpClientModule} from '@angular/common/http';
 import { MapComponent } from './map/map.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DistancePipe } from './distance.pipe';
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
     FooterComponent,
-    MapComponent
+    MapComponent,
+    DistancePipe
   ],
   imports: [
     BrowserModule,
