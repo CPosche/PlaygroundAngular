@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Marker } from '../leaflet';
-import { Center } from '../leaflet';
+import { Marker, Center } from '../leaflet';
 import { LocationService } from '../shared';
 import { Playground } from '../shared/playground';
 import { PlaygroundService } from '../shared/playground.service';

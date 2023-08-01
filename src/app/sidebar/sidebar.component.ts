@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Playground } from '../shared/playground';
-import { Observable, combineLatest, debounceTime, distinctUntilChanged, of, startWith, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { FormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { Coordinate, LocationService } from '../shared';
+import { LocationService } from '../shared';
 
 @Component({
   selector: 'app-sidebar',
@@ -19,7 +18,7 @@ import { Coordinate, LocationService } from '../shared';
       (click)="selected.emit(playground)" role="button" >
       <div class="d-flex justify-content-between">
         <h4>{{playground.name}}</h4>
-        <div><span class="badge text-bg-primary">{{playground.position | distance: (location$ | async)}}</span></div>
+        <div><span class="badge text-bg-primary">{{playground.position | distance: (location$ | async)}} m</span></div>
         </div>
         <p class="m-0">{{playground.description}}</p>
         
@@ -37,7 +36,7 @@ export class SidebarComponent implements OnInit{
   filterControl = new FormControl('', {nonNullable: true});
   location$ = this.locationService.current
 
-  constructor(private service: ActivatedRoute, private locationService: LocationService) {
+  constructor(private locationService: LocationService) {
   }
   
   ngOnInit(){
